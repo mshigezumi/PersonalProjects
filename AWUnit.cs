@@ -16,8 +16,7 @@ namespace TbsFramework.AW
 
         private readonly MenuManager MenuManagerIn = MenuManager.Instance;
 
-        [OnInspectorGUI] //PropertyOrder(int.MaxValue)
-        //[SerializeField]
+        [OnInspectorGUI]
         public List<AWWeapon> WeaponList { get; private set; }
         private AWWeapon ActiveWeapon;
 
@@ -28,11 +27,6 @@ namespace TbsFramework.AW
         public UIView WeaponMenu;
         public UIButtonListener ButtonListener;
 
-        //private List<Button> ActionButtonList;
-        //private List<TextMeshPro> ActionTextList;
-        //private List<Button> WeaponButtonList;
-        //private List<TextMeshPro> WeaponTextList;
-
         private List<UIButton> ActionButtonList;
         private List<UIButton> WeaponButtonList;
 
@@ -41,34 +35,9 @@ namespace TbsFramework.AW
             base.Initialize();
             transform.localPosition += new Vector3(0, 0, -0.1f);
             ActiveWeapon = WeaponList[0];
-            //Button[] btn = WeaponPanel.GetComponentsInChildren<Button>();
-            //foreach (Button btn in ActionPanel.GetComponentsInChildren<Button>())
-            //{
-            //    ActionButtonList.Add(btn);
-            //    ActionTextList.Add(btn.GetComponentInChildren<TextMeshPro>());
-            //}
-            //foreach (Button btn in WeaponPanel.GetComponentsInChildren<Button>())
-            //{
-            //    WeaponButtonList.Add(btn);
-            //    WeaponTextList.Add(btn.GetComponentInChildren<TextMeshPro>());
-            //}
-
-            foreach (UIButton button in ActionMenu.GetComponentsInChildren<UIButton>())//need to find better way of doing action menu, since it's based on context of selection
-            {
-                ActionButtonList.Add(button);
-            }
-            foreach (UIButton button in WeaponMenu.GetComponentsInChildren<UIButton>())
-            {
-                WeaponButtonList.Add(button);
-            }
-
-            //WeaponButtonList = new List<Button>( new Button[5] );
-            //WeaponTextList = new List<TextMeshPro>( new TextMeshPro[5] );
-            //WeaponList = new List<Weapon>( new Weapon[5] ); //don't know if I need to set it to a number of spaces since it's a list, might need to for the inspector
         }
 
         //need to find a way to add different weapons onto each unit that can be changed on the fly (at least on the editor)
-        //can't get a list of Weapons to show in the inspector
 
         public void AddWeapons() //probably need to add this to a class based off this genaric unit, unless I find a way to add any weapon to this class
         {
@@ -115,28 +84,6 @@ namespace TbsFramework.AW
             SetColor(new Color(0, 0, 0, 0));
         }
 
-        public void ActionHandler(Button button)
-        {
-
-        }
-
-        public void WeaponHandler(Unit other) //need to find where to put this... or if it's even needed at all
-        {
-            int distance = Cell.GetDistance(other.Cell);
-            if (distance == ActiveWeapon.Range)
-            {
-
-            }
-            //foreach (AWWeapon weapon in WeaponList)
-            //{
-            //    if (distance == weapon.Range)
-            //    {
-            //        SetActiveWeapon(weapon);
-
-            //    }
-            //}
-        }
-
         public ref AWWeapon GetActiveWeapon()
         {
             return ref ActiveWeapon;
@@ -146,7 +93,7 @@ namespace TbsFramework.AW
         {
             AttackRange = weapon.Range;
             AttackFactor = weapon.AttackFactor;
-            ActiveWeapon = WeaponList[WeaponList.IndexOf(weapon)]; //both of these work? don't know if one is better
+            ActiveWeapon = WeaponList[WeaponList.IndexOf(weapon)]; //both of these work don't know if one is better
             //ActiveWeapon = WeaponList.Find(x => x.weapon == weapon);
             if (WeaponPanel.activeInHierarchy)
             {
@@ -156,7 +103,7 @@ namespace TbsFramework.AW
 
         public void FireWeapon()
         {
-            //need to find a way to pause attack action for menu, then call this for an attack
+            //pause attack action for menu, then call this for an attack
         }
 
         public void UseAmmo()
@@ -200,54 +147,6 @@ namespace TbsFramework.AW
             base.Move(destinationCell, path);
         }
 
-        public void ShowActionPanel()
-        {
-            //for (int i = 0; i < ActionPanel.GetComponentsInChildren<Button>().Length; i++)
-            //{
-            //    ActionTextList[i].text = WeaponList[i].Name;
-            //    ActionButtonList[i].onClick.AddListener(() => { ActionHandler(ActionButtonList[i]); });
-            //}
-            //ActionPanel.SetActive(true);
-
-            for (int i = 0; i < ActionMenu.GetComponentsInChildren<UIButton>().Length; i++)
-            {
-                ActionButtonList[i].SetLabelText("");//need to figure out what to put here
-                
-            }
-            ActionMenu.Show();
-        }
-
-        public void HideActionPanel()
-        {
-            //ActionPanel.SetActive(false);
-            ActionMenu.Hide();
-        }
-
-        public void ShowWeaponPanel()
-        {
-            //for (int i = 0; i < WeaponList.Count; i++)
-            //{
-            //    WeaponTextList[i].text = WeaponList[i].Name;
-            //    WeaponButtonList[i].onClick.AddListener(() => { SetActiveWeapon(WeaponList[i]); });
-            //}
-            //WeaponPanel.SetActive(true);
-
-            for (int i = 0; i < WeaponMenu.GetComponentsInChildren<UIButton>().Length; i++)
-            {
-                WeaponButtonList[i].SetLabelText(WeaponList[i].Name);
-            }
-            //need to figure out how to have a listener linked to the SetActiveWeapon()
-            ButtonListener = new UIButtonListener();
-            //ButtonListener.SendMessage(SetActiveWeapon());
-            WeaponMenu.Show();
-        }
-
-        public void HideWeaponPanel()
-        {
-            //WeaponPanel.SetActive(false);
-            WeaponMenu.Hide();
-        }
-
         protected override void OnMoveFinished()
         {
             GetComponent<SpriteRenderer>().sortingOrder -= 10;
@@ -255,7 +154,7 @@ namespace TbsFramework.AW
             transform.Find("mask").GetComponent<SpriteRenderer>().sortingOrder -= 10;
             base.OnMoveFinished();
             //need to add action panel like FE
-            ShowWeaponPanel(); //add weapon panel after movement is done
+            MenuManagerIn.ShowWeaponMenu(); //add weapon panel after movement is done
         }
 
         public override bool IsCellTraversable(Cell cell)
