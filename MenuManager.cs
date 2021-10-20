@@ -13,13 +13,6 @@ public class MenuManager : MonoBehaviour
     {
         get
         {
-            //if (_instance == null)
-            //{
-            //    //_instance = new GameObject("Menu Manager").AddComponent<MenuManager>();//this is throwing an error
-            //    _instance.Initialize();
-            //}
-
-            //Find a way to have a singleton created if there isn't one?
             return _instance;
         }
     }
@@ -63,11 +56,11 @@ public class MenuManager : MonoBehaviour
         {
             if (obj.name == "View - Action Menu" && ActionMenu == null)
             {
-                ActionMenu = obj.GetComponent<UIView>();//don't know if this is setting correctly
+                ActionMenu = obj.GetComponent<UIView>();
             }
             if (obj.name == "View - Weapon Menu" && WeaponMenu == null)
             {
-                WeaponMenu = obj.GetComponent<UIView>();//don't know if this is setting correctly
+                WeaponMenu = obj.GetComponent<UIView>();
             }
         }
         foreach (UIButton button in ActionMenu.GetComponentsInChildren<UIButton>())//need to find better way of doing action menu, since it's based on context of selection
@@ -78,11 +71,6 @@ public class MenuManager : MonoBehaviour
         {
             WeaponButtonList.Add(button);
         }
-
-
-        //WeaponButtonList = new List<Button>( new Button[5] );
-        //WeaponTextList = new List<TextMeshPro>( new TextMeshPro[5] );
-        //WeaponList = new List<Weapon>( new Weapon[5] ); //don't know if I need to set it to a number of spaces since it's a list, might need to for the inspector
     }
 
     public void SetSelectedUnit(AWUnit unit)//replace this with the UnitSelected event already used by TbsFramework?
@@ -98,7 +86,7 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    public void WeaponHandler(int number) //need to find where to put this... or if it's even needed at all
+    public void WeaponHandler(int number)
     {
         SelectedUnit.SetActiveWeapon(SelectedUnit.WeaponList[number]);
         SelectedUnit.FireWeapon();
@@ -126,6 +114,7 @@ public class MenuManager : MonoBehaviour
         //    ActionButtonList[i].onClick.AddListener(() => { ActionHandler(ActionButtonList[i]); });
         //}
         //ActionPanel.SetActive(true);
+        
         string text;
         for (int i = 0; i < ActionMenu.GetComponentsInChildren<UIButton>().Length; i++)
         {
