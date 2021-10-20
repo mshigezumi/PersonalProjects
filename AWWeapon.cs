@@ -5,7 +5,6 @@ using Sirenix.OdinInspector;
 namespace TbsFramework.AW
 {
     [CreateAssetMenu(fileName = "New Weapon", menuName = "Weapon", order = 1)]
-    //[System.Serializable]
     public class AWWeapon : ScriptableObject, Weapon
     {
         [BoxGroup("Basic Info")]
@@ -17,7 +16,6 @@ namespace TbsFramework.AW
         [TextArea]
         public string Description;
 
-        //reference "How to Use Odin Inspector with Scriptable Objects?" on youtube for odin options
         [VerticalGroup("Game Data")]
         public int Ammo;
         [VerticalGroup("Game Data")]
@@ -52,7 +50,7 @@ namespace TbsFramework.AW
         bool Weapon.IndirectFire { get; set; }
         int Weapon.AttackFactor { get; set; }
 
-        public void UseAmmo(AWUnit unit)//Should this method be part of the unit instead? since the weapon is attached to that specific unit
+        public void UseAmmo(AWUnit unit)
         {
             for (int i = 0; i < unit.WeaponList.Count; i++)
             {
